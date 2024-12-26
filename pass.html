@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #6200ea;
+            color: white;
+            padding: 20px 0;
+        }
+
+        main {
+            margin: 20px;
+        }
+
+        .generator {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+            .generator input, .generator button {
+                margin: 10px 0;
+                padding: 10px;
+                font-size: 1rem;
+                width: 100%;
+            }
+
+            .generator button {
+                background-color: #6200ea;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
+
+                .generator button:hover {
+                    background-color: #3700b3;
+                }
+
+        .result {
+            font-size: 1.2rem;
+            word-wrap: break-word;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Password Generator</h1>
+    </header>
+    <main>
+        <div class="generator">
+            <label for="length">Password Length:</label>
+            <input type="number" id="length" min="4" max="32" value="12">
+
+            <label><input type="checkbox" id="include-uppercase"> Include Uppercase Letters</label><br>
+            <label><input type="checkbox" id="include-numbers"> Include Numbers</label><br>
+            <label><input type="checkbox" id="include-symbols"> Include Symbols</label><br>
+
+            <button onclick="generatePassword()">Generate Password</button>
+
+            <div class="result" id="result"></div>
+
+            <button onclick="copyToClipboard()">Copy to Clipboard</button>
+        </div>
+    </main>
+    <script>
+        function generatePassword() {
+            const length = document.getElementById('length').value;
+            const includeUppercase = document.getElementById('include-uppercase').checked;
+            const includeNumbers = document.getElementById('include-numbers').checked;
+            const includeSymbols = document.getElementById('include-symbols').checked;
+
+            const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+            const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const numberChars = '0123456789';
+            const symbolChars = '!@#$%^&*()-_=+[]{}|;:<>,.?/';
+
+            let characters = lowercaseChars;
+            if (includeUppercase) characters += uppercaseChars;
+            if (includeNumbers) characters += numberChars;
+            if (includeSymbols) characters += symbolChars;
+
+            if (characters.length === 0) {
+                document.getElementById('result').textContent = 'Please select at least one character type!';
+                return;
+            }
+
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                password += characters[randomIndex];
+            }
+
+            document.getElementById('result').textContent = password;
+        }
+
+        function copyToClipboard() {
+            const resultElement = document.getElementById('result');
+            const password = resultElement.textContent;
+
+            if (password) {
+                navigator.clipboard.writeText(password).then(() => {
+                    alert('Password copied to clipboard!');
+                });
+            } else {
+                alert('No password to copy!');
+            }
+        }
+    </script>
+</body>
+</html>
